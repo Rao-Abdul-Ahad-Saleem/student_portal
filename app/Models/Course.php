@@ -16,8 +16,6 @@ class Course extends Model
         'name',           // e.g., Data Structures
         'code',           // e.g., CS101
         'credit_hours',   // e.g., 3
-        'department_id',  // foreign key → departments.id
-        'teacher_id',     // foreign key → teachers.id
         'semester',       // e.g., Fall 2025
         'description',    // optional course summary
     ];
@@ -29,13 +27,15 @@ class Course extends Model
     // Each course belongs to many department
     public function departments()
     {
-        return $this->belongsToMany(Department::class);
+        return $this->belongsToMany(Department::class, 'course_department')
+            ->withTimestamps();
     }
 
     // Each course is taught by many teacher
     public function teachers()
     {
-        return $this->belongsToMany(Teacher::class);
+        return $this->belongsToMany(Teacher::class, 'course_teacher')
+            ->withTimestamps();
     }
 
     // // 🎓 A course can have many enrolled students

@@ -14,9 +14,6 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('phone')->nullable();
             $table->string('designation')->nullable(); // e.g. Lecturer, Professor
-            $table->foreignId('department_id')
-                ->constrained()
-                ->onDelete('cascade'); // links to departments table
             $table->string('qualification')->nullable();
             $table->integer('experience_years')->default(0);
             $table->date('joining_date')->nullable();

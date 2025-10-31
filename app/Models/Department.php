@@ -26,16 +26,17 @@ class Department extends Model
      * 🏛️ Relationships
      */
 
-    // A department has many teachers
-    public function teachers()
-    {
-        return $this->hasMany(Teacher::class);
-    }
+    // // A department has many teachers
+    // public function teachers()
+    // {
+    //     return $this->hasMany(Teacher::class);
+    // }
 
     // A department has many courses
     public function courses()
     {
-        return $this->belongsToMany(Course::class);
+        return $this->belongsToMany(Course::class, 'course_department')
+            ->withTimestamps();
     }
 
     // A department has many students

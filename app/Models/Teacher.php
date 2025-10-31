@@ -17,7 +17,6 @@ class Teacher extends Model
         'email',
         'phone',
         'designation',     // e.g., Lecturer, Assistant Professor
-        'department_id',   // Relation with Department
         'qualification',   // e.g., MSc Computer Science
         'experience_years',
         'joining_date',
@@ -28,16 +27,17 @@ class Teacher extends Model
      * 🏛️ Relationships
      */
 
-    // Each teacher belongs to one department
-    public function department()
-    {
-        return $this->belongsTo(Department::class);
-    }
+    // // Each teacher belongs to one department
+    // public function department()
+    // {
+    //     return $this->belongsTo(Department::class);
+    // }
 
     // A teacher can teach many courses
     public function courses()
     {
-        return $this->belongsToMany(Course::class);
+        return $this->belongsToMany(Course::class, 'course_teacher')
+            ->withTimestamps();
     }
 
     // (Optional) A teacher might have attendance records
