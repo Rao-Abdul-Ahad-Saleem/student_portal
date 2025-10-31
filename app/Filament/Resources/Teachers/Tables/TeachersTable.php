@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Courses\Tables;
+namespace App\Filament\Resources\Teachers\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -8,20 +8,23 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class CoursesTable
+class TeachersTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->label('Course Name')
+                    ->label('Name')
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('code')
-                    ->label('Code')
-                    ->searchable()
+                TextColumn::make('email')
+                    ->label('Email')
+                    ->searchable(),
+
+                TextColumn::make('designation')
+                    ->label('Designation')
                     ->sortable(),
 
                 TextColumn::make('department.name')
@@ -29,34 +32,26 @@ class CoursesTable
                     ->sortable()
                     ->searchable(),
 
-                TextColumn::make('teacher.name')
-                    ->label('Teacher')
-                    ->placeholder('Unassigned')
-                    ->sortable()
-                    ->searchable(),
+                TextColumn::make('experience_years')
+                    ->label('Experience')
+                    ->sortable(),
 
-                TextColumn::make('credit_hours')
-                    ->label('Credit Hours')
-                    ->alignCenter(),
-
-                TextColumn::make('semester')
-                    ->label('Semester')
-                    ->sortable()
-                    ->toggleable(),
+                TextColumn::make('joining_date')
+                    ->label('Joined On')
+                    ->date(),
 
                 TextColumn::make('created_at')
                     ->label('Created')
-                    ->dateTime('M d, Y')
-                    ->sortable()
+                    ->dateTime()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                // 🔍 Optional: add filters later (e.g., by department or semester)
+                //
             ])
             ->recordActions([
                 EditAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
