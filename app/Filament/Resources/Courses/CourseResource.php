@@ -36,6 +36,7 @@ class CourseResource extends Resource
     {
         return [
             \App\Filament\Resources\Courses\RelationManagers\TeachersRelationManager::class,
+            \App\Filament\Resources\Courses\RelationManagers\DepartmentsRelationManager::class,
         ];
     }
 
