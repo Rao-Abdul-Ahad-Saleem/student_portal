@@ -2,64 +2,80 @@
 
 namespace App\Filament\Resources\Courses\Tables;
 
-use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\ViewAction;
+use Filament\Tables;
 use Filament\Tables\Table;
 
 class CoursesTable
 {
     public static function configure(Table $table): Table
     {
-        return $table
-            ->columns([
-                TextColumn::make('name')
-                    ->label('Course Name')
-                    ->searchable()
-                    ->sortable(),
+        return $table->columns([
+            // 🆔 Course ID
+            Tables\Columns\TextColumn::make('id')
+                ->label('ID')
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
 
-                TextColumn::make('code')
-                    ->label('Code')
-                    ->searchable()
-                    ->sortable(),
+            // 📘 Course Name
+            Tables\Columns\TextColumn::make('name')
+                ->label('Course Name')
+                ->searchable()
+                ->sortable(),
 
-                TextColumn::make('department.name')
-                    ->label('Department')
-                    ->sortable()
-                    ->searchable(),
+            // 🔢 Course Code
+            Tables\Columns\TextColumn::make('code')
+                ->label('Code')
+                ->sortable()
+                ->searchable(),
 
-                TextColumn::make('teacher.name')
-                    ->label('Teacher')
-                    ->placeholder('Unassigned')
-                    ->sortable()
-                    ->searchable(),
+            // 🏛️ Departments (many-to-many)
+            Tables\Columns\TagsColumn::make('departments.name')
+                ->label('Departments')
+                ->limit(3)
+                ->separator(',')
+                ->searchable(),
 
-                TextColumn::make('credit_hours')
-                    ->label('Credit Hours')
-                    ->alignCenter(),
+            // 👩‍🏫 Teachers (many-to-many)
+            Tables\Columns\TagsColumn::make('teachers.name')
+                ->label('Teachers')
+                ->limit(3)
+                ->separator(',')
+                ->searchable(),
 
-                TextColumn::make('semester')
-                    ->label('Semester')
-                    ->sortable()
-                    ->toggleable(),
+            // 🎓 Credit Hours
+            Tables\Columns\TextColumn::make('credit_hours')
+                ->label('Credit Hours')
+                ->sortable(),
 
-                TextColumn::make('created_at')
-                    ->label('Created')
-                    ->dateTime('M d, Y')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
+            // 🗓️ Semester
+            Tables\Columns\TextColumn::make('semester')
+                ->label('Semester')
+                ->sortable(),
+
+            // 🕒 Created At
+            Tables\Columns\TextColumn::make('created_at')
+                ->label('Created')
+                ->dateTime('d M, Y')
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+        ])
+
             ->filters([
-                // 🔍 Optional: add filters later (e.g., by department or semester)
+                // You can add filters later like by department or semester
             ])
+
             ->recordActions([
+                ViewAction::make(),
                 EditAction::make(),
+                DeleteAction::make(),
             ])
+
             ->bulkActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                DeleteBulkAction::make(),
             ]);
     }
 }

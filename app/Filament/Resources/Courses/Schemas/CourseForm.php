@@ -11,6 +11,7 @@ class CourseForm
     {
         return $schema
             ->components([
+                // 🏷️ Course Basic Info
                 Forms\Components\TextInput::make('name')
                     ->label('Course Name')
                     ->required(),
@@ -25,24 +26,32 @@ class CourseForm
                     ->numeric()
                     ->default(3),
 
-                Forms\Components\Select::make('department_id')
-                    ->label('Department')
-                    ->relationship('department', 'name')
-                    ->required()
-                    ->searchable(),
-
-                Forms\Components\Select::make('teacher_id')
-                    ->label('Assigned Teacher')
-                    ->relationship('teacher', 'name')
-                    ->searchable(),
-
+                // 📚 Semester Info
                 Forms\Components\TextInput::make('semester')
                     ->label('Semester')
                     ->placeholder('e.g., Fall 2025'),
 
                 Forms\Components\Textarea::make('description')
                     ->label('Course Description')
-                    ->rows(3),
+                    ->rows(3)
+                    ->columnSpanFull(),
+
+                // 🏛️ Many-to-Many: Departments
+                Forms\Components\Select::make('departments')
+                    ->label('Departments')
+                    ->relationship('departments', 'name')
+                    ->multiple()
+                    ->preload()
+                    ->searchable()
+                    ->required(),
+
+                // 👩‍🏫 Many-to-Many: Teachers
+                Forms\Components\Select::make('teachers')
+                    ->label('Teachers')
+                    ->relationship('teachers', 'name')
+                    ->multiple()
+                    ->preload()
+                    ->searchable(),
 
             ]);
     }

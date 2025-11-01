@@ -2,65 +2,53 @@
 
 namespace App\Filament\Resources\Departments\Tables;
 
-use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\ViewAction;
+use Filament\Tables;
 use Filament\Tables\Table;
 
 class DepartmentsTable
 {
     public static function configure(Table $table): Table
     {
-        return $table
-            ->columns([
-                TextColumn::make('name')
-                    ->label('Department Name')
-                    ->searchable()
-                    ->sortable(),
+        return $table->columns([
+            Tables\Columns\TextColumn::make('name')
+                ->label('Department Name')
+                ->sortable()
+                ->searchable(),
 
-                TextColumn::make('code')
-                    ->label('Code')
-                    ->sortable()
-                    ->searchable(),
+            Tables\Columns\TextColumn::make('code')
+                ->label('Code')
+                ->sortable()
+                ->searchable(),
 
-                TextColumn::make('head_of_department')
-                    ->label('Head of Department')
-                    ->searchable()
-                    ->toggleable(),
+            Tables\Columns\TextColumn::make('head_of_department')
+                ->label('Head of Department')
+                ->sortable()
+                ->searchable(),
 
-                TextColumn::make('email')
-                    ->label('Email')
-                    ->toggleable(),
+            Tables\Columns\TextColumn::make('email')
+                ->label('Email'),
 
-                TextColumn::make('phone')
-                    ->label('Phone')
-                    ->toggleable(),
+            Tables\Columns\TextColumn::make('phone')
+                ->label('Phone'),
 
-                TextColumn::make('office_location')
-                    ->label('Office')
-                    ->toggleable(),
+            Tables\Columns\TextColumn::make('office_location')
+                ->label('Office'),
 
-                TextColumn::make('created_at')
-                    ->label('Created On')
-                    ->dateTime('M d, Y')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
+        ])
             ->filters([
-                // You can add future filters here (e.g., by department code or HOD)
+                // optional filters (e.g., by course count) can be added later
             ])
             ->recordActions([
-                EditAction::make()
-                    ->label('Edit')
-                    ->button()
-                    ->color('primary'),
+                ViewAction::make(),
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make()
-                        ->label('Delete Selected'),
-                ]),
+            ->bulkActions([
+                DeleteBulkAction::make(),
             ]);
     }
 }

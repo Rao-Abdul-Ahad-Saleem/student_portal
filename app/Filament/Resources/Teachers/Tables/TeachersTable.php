@@ -2,59 +2,66 @@
 
 namespace App\Filament\Resources\Teachers\Tables;
 
-use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\ViewAction;
+use Filament\Tables;
 use Filament\Tables\Table;
 
 class TeachersTable
 {
     public static function configure(Table $table): Table
     {
-        return $table
-            ->columns([
-                TextColumn::make('name')
-                    ->label('Name')
-                    ->searchable()
-                    ->sortable(),
+        return $table->columns([
+            // 👨‍🏫 Basic Info
+            Tables\Columns\TextColumn::make('name')
+                ->label('Name')
+                ->sortable()
+                ->searchable(),
 
-                TextColumn::make('email')
-                    ->label('Email')
-                    ->searchable(),
+            Tables\Columns\TextColumn::make('designation')
+                ->label('Designation')
+                ->sortable()
+                ->searchable(),
 
-                TextColumn::make('designation')
-                    ->label('Designation')
-                    ->sortable(),
+            Tables\Columns\TextColumn::make('email')
+                ->label('Email')
+                ->searchable(),
 
-                TextColumn::make('department.name')
-                    ->label('Department')
-                    ->sortable()
-                    ->searchable(),
+            Tables\Columns\TextColumn::make('experience_years')
+                ->label('Experience (Years)')
+                ->sortable(),
 
-                TextColumn::make('experience_years')
-                    ->label('Experience')
-                    ->sortable(),
+            Tables\Columns\TextColumn::make('joining_date')
+                ->label('Joining Date')
+                ->date()
+                ->sortable(),
 
-                TextColumn::make('joining_date')
-                    ->label('Joined On')
-                    ->date(),
+            // 🎓 Courses taught (many-to-many pivot)
+            Tables\Columns\TextColumn::make('courses.name')
+                ->label('Courses Taught')
+                ->badge() // Displays as colored badges
+                ->separator(', ')
+                ->wrap()
+                ->searchable()
+                ->limitList(3)
+                ->tooltip(fn ($record) => $record->courses->pluck('name')->join(', ')),
 
-                TextColumn::make('created_at')
-                    ->label('Created')
-                    ->dateTime()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
+            Tables\Columns\TextColumn::make('qualification')
+                ->label('Qualification')
+                ->toggleable(isToggledHiddenByDefault: true),
+        ])
             ->filters([
-                //
+                // (Optional) Add filters if needed later, e.g., by designation or experience
             ])
             ->recordActions([
+                ViewAction::make(),
                 EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+            ->bulkActions([
+                DeleteBulkAction::make(),
             ]);
     }
 }

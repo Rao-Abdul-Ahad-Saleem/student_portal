@@ -19,7 +19,7 @@ class DepartmentForm
 
             Forms\Components\TextInput::make('code')
                 ->label('Department Code')
-                ->placeholder('e.g., CS, BBA, EE')
+                ->placeholder('e.g., CS, EE, BBA')
                 ->required()
                 ->unique(ignoreRecord: true)
                 ->maxLength(10),

@@ -9,57 +9,59 @@ class TeacherForm
 {
     public static function configure(Schema $schema): Schema
     {
-        return $schema
-            ->components([
+        return $schema->components([
+            // 👨‍🏫 Basic Information
+            Forms\Components\TextInput::make('name')
+                ->label('Full Name')
+                ->required()
+                ->maxLength(255),
 
-                Forms\Components\TextInput::make('name')
-                    ->label('Full Name')
-                    ->required()
-                    ->maxLength(255),
+            Forms\Components\TextInput::make('email')
+                ->label('Email Address')
+                ->email()
+                ->required()
+                ->unique(ignoreRecord: true),
 
-                Forms\Components\TextInput::make('email')
-                    ->label('Email')
-                    ->email()
-                    ->unique(ignoreRecord: true)
-                    ->required(),
+            Forms\Components\TextInput::make('phone')
+                ->label('Phone Number')
+                ->placeholder('+92 300 1234567')
+                ->maxLength(20),
 
-                Forms\Components\TextInput::make('phone')
-                    ->label('Phone Number')
-                    ->maxLength(20),
+            // 🧑‍🎓 Professional Info
+            Forms\Components\TextInput::make('designation')
+                ->label('Designation')
+                ->placeholder('Lecturer, Assistant Professor, etc.')
+                ->maxLength(100),
 
-                Forms\Components\Select::make('designation')
-                    ->label('Designation')
-                    ->options([
-                        'Lecturer' => 'Lecturer',
-                        'Assistant Professor' => 'Assistant Professor',
-                        'Associate Professor' => 'Associate Professor',
-                        'Professor' => 'Professor',
-                    ])
-                    ->required(),
+            Forms\Components\TextInput::make('qualification')
+                ->label('Highest Qualification')
+                ->placeholder('e.g., MSc Computer Science, PhD AI')
+                ->maxLength(150),
 
-                Forms\Components\Select::make('department_id')
-                    ->label('Department')
-                    ->relationship('department', 'name')
-                    ->preload()
-                    ->searchable()
-                    ->required(),
+            Forms\Components\TextInput::make('experience_years')
+                ->label('Experience (Years)')
+                ->numeric()
+                ->default(0),
 
-                Forms\Components\TextInput::make('qualification')
-                    ->label('Qualification')
-                    ->maxLength(255),
+            Forms\Components\DatePicker::make('joining_date')
+                ->label('Joining Date')
+                ->placeholder('Select date'),
 
-                Forms\Components\TextInput::make('experience_years')
-                    ->label('Experience (Years)')
-                    ->numeric()
-                    ->default(0),
+            // 🏫 Courses taught (many-to-many)
+            Forms\Components\Select::make('courses')
+                ->label('Courses Taught')
+                ->multiple()
+                ->relationship('courses', 'name')
+                ->preload()
+                ->searchable()
+                ->helperText('Select one or more courses this teacher teaches.'),
 
-                Forms\Components\DatePicker::make('joining_date')
-                    ->label('Joining Date'),
-
-                Forms\Components\Textarea::make('address')
-                    ->label('Address')
-                    ->rows(3),
-
-            ]);
+            // 🏠 Address
+            Forms\Components\Textarea::make('address')
+                ->label('Address')
+                ->placeholder('Residential or office address')
+                ->rows(3)
+                ->columnSpanFull(),
+        ]);
     }
 }
